@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrainFleas</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--background-color);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      padding: 1rem;
+      background: var(--header-background);
+      color: var(--header-text-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+      background: var(--input-background);
+      color: var(--text-color);
+    }
+    header button {
+      padding: 0.5rem 1rem;
+      background: var(--button-background);
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      color: var(--button-text-color);
+    }
+    #cards {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .card {
+      width: 300px;
+      height: 220px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      background: var(--card-background);
+      display: flex;
+      flex-direction: column;
+    }
+    .card iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      flex: 1;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #ff1744;
+      border: none;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .drag-handle {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      cursor: grab;
+      font-size: 1rem;
+    }
+    .dragging {
+      opacity: 0.5;
+    }
+
+    /* Light and Dark Mode Variables */
+    :root {
+      --background-color: #f2f2f2;
+      --text-color: #000;
+      --header-background: #6200ea;
+      --header-text-color: #fff;
+      --input-background: #fff;
+      --button-background: #03dac5;
+      --button-text-color: #fff;
+      --card-border: #ccc;
+      --card-background: #fff;
+    }
+
+    body.dark-mode {
+      --background-color: #121212;
+      --text-color: #fff;
+      --header-background: #bb86fc;
+      --header-text-color: #fff;
+      --input-background: #333;
+      --button-background: #03dac5;
+      --button-text-color: #fff;
+      --card-border: #333;
+      --card-background: #1f1f1f;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <input id="systemInput" type="text" placeholder="Enter system ID">
+    <button id="addButton">Add</button>
+    <button id="themeToggle">🌙</button>
+  </header>
+  <div id="cards"></div>
+
+  <script>
+    const cardsContainer = document.getElementById('cards');
+    const systemInput = document.getElementById('systemInput');
+    const addButton = document.getElementById('addButton');
+    const themeToggle = document.getElementById('themeToggle');
+
+    let systems = JSON.parse(localStorage.getItem('systems') || '[]');
+    const isDarkMode = JSON.parse(localStorage.getItem('darkMode') || 'false');
+    
+    // Set initial theme based on user preference
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      themeToggle.textContent = '🌞'; // Switch to light mode icon
+    } else {
+      document.body.classList.remove('dark-mode');
+      themeToggle.textContent = '🌙'; // Switch to dark mode icon
+    }
+
+    // Toggle dark/light mode
+    themeToggle.addEventListener('click', () => {
+      const isCurrentlyDark = document.body.classList.contains('dark-mode');
+      if (isCurrentlyDark) {
+        document.body.classList.remove('dark-mode');
+        themeToggle.textContent = '🌙'; // Switch to dark mode icon
+        localStorage.setItem('darkMode', JSON.stringify(false));
+      } else {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '🌞'; // Switch to light mode icon
+        localStorage.setItem('darkMode', JSON.stringify(true));
+      }
+    });
+
+    function saveSystems() {
+      localStorage.setItem('systems', JSON.stringify(systems));
+    }
+
+    function renderCards() {
+      cardsContainer.innerHTML = '';
+      systems.forEach((id, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('draggable', true);
+        card.dataset.index = index;
+
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://pluralkit.xyz/f/${id}`;
+        card.appendChild(iframe);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '✕';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = () => {
+          systems.splice(index, 1);
+          saveSystems();
+          renderCards();
+        };
+        card.appendChild(deleteBtn);
+
+        const dragHandle = document.createElement('div');
+        dragHandle.textContent = '≡';
+        dragHandle.className = 'drag-handle';
+        card.appendChild(dragHandle);
+
+        cardsContainer.appendChild(card);
+      });
+
+      addDragAndDrop();
+    }
+
+    addButton.addEventListener('click', () => {
+      const id = systemInput.value.trim();
+      if (!id) return;
+      if (!systems.includes(id)) {
+        systems.push(id);
+        saveSystems();
+        renderCards();
+        systemInput.value = '';
+      }
+    });
+
+    function addDragAndDrop() {
+      let dragged = null;
+
+      cardsContainer.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('dragstart', e => {
+          dragged = card;
+          card.classList.add('dragging');
+        });
+
+        card.addEventListener('dragend', e => {
+          card.classList.remove('dragging');
+          dragged = null;
+          saveSystemsOrder();
+        });
+
+        card.addEventListener('dragover', e => {
+          e.preventDefault();
+          const bounding = card.getBoundingClientRect();
+          const offset = e.clientY - bounding.top + bounding.height / 2;
+          if (offset > bounding.height / 2) {
+            card.after(dragged);
+          } else {
+            card.before(dragged);
+          }
+        });
+
+        card.addEventListener('touchstart', e => {
+          dragged = card;
+          card.classList.add('dragging');
+        });
+
+        card.addEventListener('touchend', e => {
+          card.classList.remove('dragging');
+          dragged = null;
+          saveSystemsOrder();
+        });
+
+        card.addEventListener('touchmove', e => {
+          if (!dragged) return;
+          const touch = e.touches[0];
+          const bounding = card.getBoundingClientRect();
+          const offset = touch.clientY - bounding.top + bounding.height / 2;
+          if (offset > bounding.height / 2) {
+            card.after(dragged);
+          } else {
+            card.before(dragged);
+          }
+        });
+      });
+    }
+
+    function saveSystemsOrder() {
+      systems = Array.from(cardsContainer.children).map(c => systems[c.dataset.index]);
+      saveSystems();
+      renderCards(); // re-render to reset dataset.index
+    }
+
+    renderCards();
+
+    // PWA: Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.error('SW Registration failed:', err));
+    }
+  </script>
+</body>
+</html>
