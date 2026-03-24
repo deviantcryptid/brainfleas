@@ -18,18 +18,18 @@ body[data-theme="dark"] {
 header {
     display: flex;
     align-items: center;
-    justify-content: center; /* center everything */
+    justify-content: center; /* center header contents */
     gap: 10px;
     margin-bottom: 20px;
-    padding: 10px 0;
-    background-color: #fff;
+    padding: 10px;
+    background-color: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
 body[data-theme="dark"] header {
     background-color: #1e1e1e;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5);
 }
 
 header img {
@@ -42,22 +42,28 @@ header h1 {
     margin: 0;
 }
 
+/* ---------- Input Area ---------- */
+#input-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px; /* extra space between input and system cards */
+}
+
 /* ---------- Shortcode Input Field ---------- */
 #shortcode-input {
-    padding: 8px 10px;       
+    padding: 8px 10px;
     font-size: 1em;
-    width: 100%;          /* take full available width */
-    max-width: 300px;     /* desktop-friendly max */
+    width: 280px;
     border: 2px solid #ccc;
     border-radius: 5px;
-    margin-right: 10px;
-    box-sizing: border-box;  
+    box-sizing: border-box;
 }
 
 /* Responsive input */
 @media (max-width: 600px) {
     #shortcode-input {
-        width: 100%;          
+        width: 100%;
         margin-right: 0;
         margin-bottom: 5px;
     }
@@ -144,7 +150,7 @@ body[data-theme="dark"] .system-card {
     border-radius: 50%;
     border-width: 3px;
     border-style: solid;
-    object-fit: cover; /* fixes distortion */
+    object-fit: cover;
 }
 
 .system-name {
@@ -202,7 +208,7 @@ body[data-theme="dark"] .fronter {
     border-width: 2px;
     border-style: solid;
     margin-bottom: 2px;
-    object-fit: cover; /* fixes distortion */
+    object-fit: cover;
 }
 
 .fronter-name {
@@ -231,12 +237,12 @@ em {
 @media (max-width: 600px) {
     header {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         gap: 5px;
     }
 
     #shortcode-input {
-        width: 100%;          
+        width: 100%;
         margin-right: 0;
         margin-bottom: 5px;
     }
