@@ -41,11 +41,23 @@ body[data-theme="dark"] header {
 header img {
     width: 40px;
     height: 40px;
+    transition: box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 header h1 {
     font-size: 1.8em;
     margin: 0;
+}
+
+/* ---------- Header Icon Glow for Both Light and Dark Mode (Soft Blue Glow) ---------- */
+body[data-theme="dark"] header img {
+    box-shadow: 0 0 8px rgba(173, 216, 230, 0.8), 0 0 20px rgba(173, 216, 230, 0.6); /* Soft blue glow */
+    filter: brightness(0) saturate(100%) invert(1) drop-shadow(0 0 8px rgba(173, 216, 230, 0.8)); /* Soft blue drop-shadow */
+}
+
+body[data-theme="light"] header img {
+    box-shadow: 0 0 6px rgba(173, 216, 230, 0.4), 0 0 12px rgba(173, 216, 230, 0.3); /* Softer blue glow */
+    filter: drop-shadow(0 0 4px rgba(173, 216, 230, 0.4)); /* Soft blue drop-shadow */
 }
 
 /* ---------- Input Area ---------- */
@@ -96,31 +108,6 @@ body[data-theme="dark"] #add-system-btn:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.7);
 }
 
-/* ---------- Theme Toggle Button ---------- */
-#theme-toggle {
-    padding: 8px 12px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-    color: inherit;
-}
-
-/* Light mode hover */
-body[data-theme="light"] #theme-toggle:hover {
-    background-color: rgba(0,0,0,0.05);
-}
-
-/* Dark mode color and hover */
-body[data-theme="dark"] #theme-toggle {
-    color: #555; /* darker gray in dark mode */
-}
-
-body[data-theme="dark"] #theme-toggle:hover {
-    background-color: rgba(255,255,255,0.08); /* subtle white hover */
-}
-
 /* ---------- Systems Container ---------- */
 #systems-container {
     display: flex;
@@ -168,45 +155,25 @@ body[data-theme="dark"] .system-card {
     flex-grow: 1;
 }
 
-/* ---------- Cleaner Remove Button ---------- */
-.remove-system {
-    background: none;
-    border: none;
-    font-size: 1em;
-    color: #888;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.2s;
-    padding: 0;
-    margin-left: auto;
-}
-
-.remove-system:hover {
-    color: #f33;
-    transform: scale(1.2);
-}
-
-/* ---------- Fronters Container (Horizontal Scroll) ---------- */
+/* ---------- Fronters (mini cards) ---------- */
 .fronters {
-    display: flex;                 /* Align the items horizontally */
-    gap: 6px;                      /* Space between each fronting member */
-    overflow-x: auto;              /* Enable horizontal scrolling */
-    max-width: 100%;               /* Ensure full width */
-    padding-bottom: 10px;          /* Space for a scrollbar (if needed) */
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto; /* Make it scrollable horizontally */
 }
 
-/* ---------- Fronter (Individual Member) ---------- */
 .fronter {
-    display: inline-flex;          /* Make each fronting member stay on one line */
+    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 5px 8px;
-    min-width: 80px;               /* Set a minimum width for each member */
-    max-width: 100px;              /* Set a maximum width for each member */
+    min-width: 60px;
+    max-width: 100px;
     background-color: #fafafa;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     gap: 3px;
-    flex-shrink: 0;                /* Prevent the items from shrinking */
 }
 
 body[data-theme="dark"] .fronter {
@@ -214,26 +181,22 @@ body[data-theme="dark"] .fronter {
 }
 
 .fronter-avatar {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
     object-fit: cover;
 }
 
 .fronter-name {
     font-weight: bold;
-    font-size: 1em; /* Default font size */
+    font-size: 0.9em;
     text-align: center;
     line-height: 1.1;
-    white-space: nowrap;  /* Prevent text from wrapping */
-    overflow: hidden;
-    text-overflow: ellipsis;  /* Add ellipsis if text overflows */
 }
 
-/* ---------- Fronter Pronouns ---------- */
 .fronter-pronouns {
     font-size: 0.75em;
     color: #666;
@@ -244,18 +207,13 @@ body[data-theme="dark"] .fronter-pronouns {
     color: #aaa;
 }
 
-/* ---------- Utility ---------- */
-em {
-    font-style: italic;
-}
-
 /* ---------- Responsive Adjustments ---------- */
 @media (max-width: 600px) {
     /* Ensure header stays in one line */
     header {
-        flex-direction: row;  /* Make sure the icon and title stay on the same line */
-        align-items: center;  /* Center both vertically */
-        gap: 10px;            /* Space between icon and title */
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
     }
 
     header img {
