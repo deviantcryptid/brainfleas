@@ -237,11 +237,20 @@ em {
 
 /* ---------- Responsive Adjustments ---------- */
 @media (max-width: 600px) {
+    /* Ensure header stays in one line */
     header {
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-        padding: 10px;
+        flex-direction: row;  /* Make sure the icon and title stay on the same line */
+        align-items: center;  /* Center both vertically */
+        gap: 10px;            /* Space between icon and title */
+    }
+
+    header img {
+        width: 35px;    /* Adjust icon size for smaller screens */
+        height: 35px;
+    }
+
+    header h1 {
+        font-size: 1.5em;  /* Adjust title size for smaller screens */
     }
 
     #shortcode-input {
