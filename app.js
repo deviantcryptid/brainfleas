@@ -132,7 +132,7 @@ function renderSystemCard(data) {
 }
 
 // ---------- Add System ----------
-addBtn.addEventListener('click', async () => {
+async function addSystem() {
     const shortcode = shortcodeInput.value.trim();
     if (!shortcode) return;
     if (savedSystemRefs.includes(shortcode) || systems.some(s => s.displayRef === shortcode)) {
@@ -146,6 +146,15 @@ addBtn.addEventListener('click', async () => {
         localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
         renderAllSystems();
         shortcodeInput.value = '';
+    }
+}
+
+addBtn.addEventListener('click', addSystem);
+
+// ---------- Press Enter to Add System ----------
+shortcodeInput.addEventListener('keyup', async (e) => {
+    if (e.key === 'Enter') {
+        addBtn.click();
     }
 });
 
