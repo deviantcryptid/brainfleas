@@ -4,7 +4,7 @@
   "description": "A multi-system PluralKit dashboard",
   "start_url": ".",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",  // Changed from 'standalone' to 'fullscreen' for app to go behind the status bar
   "background_color": "#f0f0f0",
   "theme_color": "#f0f0f0",
   "orientation": "portrait-primary",
