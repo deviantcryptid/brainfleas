@@ -92,6 +92,7 @@ body[data-theme="dark"] .system-card {
     border-radius: 50%;
     border-width: 3px;
     border-style: solid;
+    object-fit: cover; /* fixes distortion */
 }
 
 .system-name {
@@ -149,6 +150,7 @@ body[data-theme="dark"] .fronter {
     border-width: 2px;
     border-style: solid;
     margin-bottom: 2px;
+    object-fit: cover; /* fixes distortion */
 }
 
 .fronter-name {
