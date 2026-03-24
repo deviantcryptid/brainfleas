@@ -49,7 +49,7 @@ async function fetchSystemWithFronters(systemRef) {
                         id: id,
                         name: member.name || "Unknown",
                         display_name: member.display_name || null,
-                        avatar_url: member.avatar_url || '', // hide if missing
+                        avatar_url: member.avatar_url || '',
                         pronouns: member.pronouns || "",
                         color: member.color || "#999"
                     };
@@ -57,7 +57,10 @@ async function fetchSystemWithFronters(systemRef) {
             }
         }
 
-        return { system, fronters };
+        // DisplayRef fallback for undefined ref
+        const displayRef = system.ref || system.id.slice(0, 5);
+
+        return { system, fronters, displayRef };
     } catch (err) {
         console.error(err);
         alert(`Error fetching system "${systemRef}": ${err.message}`);
@@ -76,6 +79,8 @@ function renderSystemCard(data) {
     card.className = 'system-card';
     card.style.borderColor = data.system.color || '#999';
 
+    const displayRef = data.displayRef;
+
     card.innerHTML = `
         <div class="system-header">
             <img src="${data.system.avatar_url || ''}" 
@@ -83,23 +88,26 @@ function renderSystemCard(data) {
                  style="border-color: ${data.system.color || '#999'}" 
                  onerror="this.style.display='none'">
             <h2 class="system-name" style="color: ${data.system.color || '#999'}">
-                ${data.system.name} (@${data.system.ref})
+                ${data.system.name} (@${displayRef})
             </h2>
             <button class="remove-system" title="Remove system">✖️</button>
         </div>
         <div class="fronters">
-            ${data.fronters.map(f => `
-                <div class="fronter" style="border-color: ${f.color}">
-                    <img src="${f.avatar_url || ''}" 
-                         class="fronter-avatar" 
-                         style="border-color: ${f.color}" 
-                         onerror="this.style.display='none'">
-                    <span class="fronter-name" style="color: ${f.color}">
-                        ${f.display_name || f.name}
-                    </span>
-                    <span class="fronter-pronouns">${f.pronouns}</span>
-                </div>
-            `).join('')}
+            ${data.fronters.length > 0
+                ? data.fronters.map(f => `
+                    <div class="fronter" style="border-color: ${f.color}">
+                        <img src="${f.avatar_url || ''}" 
+                             class="fronter-avatar" 
+                             style="border-color: ${f.color}" 
+                             onerror="this.style.display='none'">
+                        <span class="fronter-name" style="color: ${f.color}">
+                            ${f.display_name || f.name}
+                        </span>
+                        <span class="fronter-pronouns">${f.pronouns}</span>
+                    </div>
+                  `).join('')
+                : `<em style="color:#666;font-size:0.9em;">No one is fronting</em>`
+            }
         </div>
     `;
 
@@ -107,8 +115,8 @@ function renderSystemCard(data) {
 
     // Remove system
     card.querySelector('.remove-system').addEventListener('click', () => {
-        systems = systems.filter(s => s.system.ref !== data.system.ref);
-        savedSystemRefs = savedSystemRefs.filter(ref => ref !== data.system.ref);
+        systems = systems.filter(s => s.displayRef !== displayRef);
+        savedSystemRefs = savedSystemRefs.filter(ref => ref !== displayRef);
         localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
         renderAllSystems();
     });
@@ -125,7 +133,7 @@ addBtn.addEventListener('click', async () => {
     const data = await fetchSystemWithFronters(shortcode);
     if (data) {
         systems.push(data);
-        savedSystemRefs.push(shortcode);
+        savedSystemRefs.push(data.displayRef); // save the fallback ref
         localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
         renderAllSystems();
         shortcodeInput.value = '';
