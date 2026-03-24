@@ -18,35 +18,61 @@ body[data-theme="dark"] {
 header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center; /* center content horizontally */
+    gap: 15px;
+    padding: 15px 20px;
     margin-bottom: 20px;
+    background-color: #f7f7f7; /* light mode header background */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+body[data-theme="dark"] header {
+    background-color: #1e1e1e; /* dark mode header background */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Header icon */
 header img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 }
 
+/* Header title */
 header h1 {
-    font-size: 1.8em;
+    font-size: 2em;
     margin: 0;
+    font-weight: bold;
+}
+
+/* Theme toggle button */
+#theme-toggle {
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.2);
 }
 
 /* ---------- Shortcode Input Field ---------- */
 #shortcode-input {
-    padding: 8px 10px;       /* extra horizontal padding */
+    padding: 8px 10px;       
     font-size: 1em;
-    width: 280px;            /* wide enough for placeholder */
+    width: 280px;            
     border: 2px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
-    box-sizing: border-box;  /* includes padding in width */
+    box-sizing: border-box;  
 }
 
 /* Responsive input */
 @media (max-width: 600px) {
     #shortcode-input {
-        width: 100%;          /* full width on mobile */
+        width: 100%;          
         margin-right: 0;
         margin-bottom: 5px;
     }
@@ -62,7 +88,7 @@ header h1 {
     font-weight: 600;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    background-color: #4CAF50; /* green for light mode */
+    background-color: #4CAF50; 
     color: #fff;
 }
 
@@ -72,7 +98,7 @@ header h1 {
 }
 
 body[data-theme="dark"] #add-system-btn {
-    background-color: #2E7D32; /* darker green for dark mode */
+    background-color: #2E7D32;
     color: #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
@@ -80,20 +106,6 @@ body[data-theme="dark"] #add-system-btn {
 body[data-theme="dark"] #add-system-btn:hover {
     background-color: #1B5E20;
     box-shadow: 0 4px 8px rgba(0,0,0,0.7);
-}
-
-/* ---------- Theme Toggle Button ---------- */
-#theme-toggle {
-    padding: 8px 12px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-#theme-toggle:hover {
-    background-color: rgba(0,0,0,0.1);
 }
 
 /* ---------- Systems Container ---------- */
@@ -133,7 +145,7 @@ body[data-theme="dark"] .system-card {
     border-radius: 50%;
     border-width: 3px;
     border-style: solid;
-    object-fit: cover; /* fixes distortion */
+    object-fit: cover;
 }
 
 .system-name {
@@ -191,7 +203,7 @@ body[data-theme="dark"] .fronter {
     border-width: 2px;
     border-style: solid;
     margin-bottom: 2px;
-    object-fit: cover; /* fixes distortion */
+    object-fit: cover;
 }
 
 .fronter-name {
@@ -220,12 +232,18 @@ em {
 @media (max-width: 600px) {
     header {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+        text-align: center;
     }
 
     #shortcode-input {
-        width: 100%;          /* full width on mobile */
+        width: 100%;
         margin-right: 0;
         margin-bottom: 5px;
     }
