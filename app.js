@@ -14,6 +14,7 @@ const themeToggleBtn = document.getElementById('theme-toggle');
 function updateThemeIcon() {
     themeToggleBtn.textContent = theme === 'light' ? '🌞' : '🌜';
 }
+
 themeToggleBtn.addEventListener('click', () => {
     theme = theme === 'light' ? 'dark' : 'light';
     document.body.dataset.theme = theme;
@@ -38,18 +39,23 @@ async function fetchSystemWithFronters(systemRef) {
 
         // Current fronters
         const frontersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/fronters`);
-        const frontersData = frontersRes.ok ? await frontersRes.json() : [];
-        const fronters = frontersData.map(f => {
-            const member = memberMap[f.id] || {};
-            return {
-                id: f.id,
-                name: member.name || "Unknown",
-                display_name: member.display_name || null,
-                avatar_url: member.avatar_url || '', // empty if missing
-                pronouns: member.pronouns || "",
-                color: member.color || "#999"
-            };
-        });
+        let fronters = [];
+        if (frontersRes.ok) {
+            const frontersData = await frontersRes.json();
+            if (Array.isArray(frontersData.ids)) {
+                fronters = frontersData.ids.map(id => {
+                    const member = memberMap[id] || {};
+                    return {
+                        id: id,
+                        name: member.name || "Unknown",
+                        display_name: member.display_name || null,
+                        avatar_url: member.avatar_url || '', // hide if missing
+                        pronouns: member.pronouns || "",
+                        color: member.color || "#999"
+                    };
+                });
+            }
+        }
 
         return { system, fronters };
     } catch (err) {
