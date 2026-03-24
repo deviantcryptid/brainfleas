@@ -15,10 +15,11 @@ const FILES_TO_CACHE = [
 
 /* ---------- Install Event ---------- */
 self.addEventListener('install', event => {
+    console.log('[ServiceWorker] Installing...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('[ServiceWorker] Caching app shell');
+                console.log('[ServiceWorker] Caching app shell...');
                 return cache.addAll(FILES_TO_CACHE);
             })
     );
@@ -27,14 +28,17 @@ self.addEventListener('install', event => {
 
 /* ---------- Activate Event ---------- */
 self.addEventListener('activate', event => {
+    console.log('[ServiceWorker] Activating...');
     event.waitUntil(
         caches.keys().then(keyList => {
-            return Promise.all(keyList.map(key => {
-                if (key !== CACHE_NAME) {
-                    console.log('[ServiceWorker] Removing old cache', key);
-                    return caches.delete(key);
-                }
-            }));
+            return Promise.all(
+                keyList.map(key => {
+                    if (key !== CACHE_NAME) {
+                        console.log('[ServiceWorker] Removing old cache:', key);
+                        return caches.delete(key);
+                    }
+                })
+            );
         })
     );
     self.clients.claim();
@@ -42,11 +46,23 @@ self.addEventListener('activate', event => {
 
 /* ---------- Fetch Event ---------- */
 self.addEventListener('fetch', event => {
-    // Try cache first, then network
     event.respondWith(
         caches.match(event.request)
-            .then(response => {
-                return response || fetch(event.request);
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    // Serve cached version
+                    return cachedResponse;
+                }
+                // Fetch from network if not cached
+                return fetch(event.request)
+                    .then(networkResponse => {
+                        // Optional: cache new requests dynamically if desired
+                        return networkResponse;
+                    })
+                    .catch(() => {
+                        // Optional: fallback page or image if fetch fails
+                        console.warn('[ServiceWorker] Fetch failed for:', event.request.url);
+                    });
             })
     );
 });
