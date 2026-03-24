@@ -45,7 +45,7 @@ async function fetchSystemWithFronters(systemRef) {
                 id: f.id,
                 name: member.name || "Unknown",
                 display_name: member.display_name || null,
-                avatar_url: member.avatar_url || 'default-avatar.png',
+                avatar_url: member.avatar_url || '', // empty if missing
                 pronouns: member.pronouns || "",
                 color: member.color || "#999"
             };
@@ -72,15 +72,25 @@ function renderSystemCard(data) {
 
     card.innerHTML = `
         <div class="system-header">
-            <img src="${data.system.avatar_url || 'default-avatar.png'}" class="system-avatar" style="border-color: ${data.system.color || '#999'}">
-            <h2 class="system-name" style="color: ${data.system.color || '#999'}">${data.system.name} (@${data.system.ref})</h2>
+            <img src="${data.system.avatar_url || ''}" 
+                 class="system-avatar" 
+                 style="border-color: ${data.system.color || '#999'}" 
+                 onerror="this.style.display='none'">
+            <h2 class="system-name" style="color: ${data.system.color || '#999'}">
+                ${data.system.name} (@${data.system.ref})
+            </h2>
             <button class="remove-system" title="Remove system">✖️</button>
         </div>
         <div class="fronters">
             ${data.fronters.map(f => `
                 <div class="fronter" style="border-color: ${f.color}">
-                    <img src="${f.avatar_url || 'default-avatar.png'}" class="fronter-avatar" style="border-color: ${f.color}">
-                    <span class="fronter-name" style="color: ${f.color}">${f.display_name || f.name}</span>
+                    <img src="${f.avatar_url || ''}" 
+                         class="fronter-avatar" 
+                         style="border-color: ${f.color}" 
+                         onerror="this.style.display='none'">
+                    <span class="fronter-name" style="color: ${f.color}">
+                        ${f.display_name || f.name}
+                    </span>
                     <span class="fronter-pronouns">${f.pronouns}</span>
                 </div>
             `).join('')}
