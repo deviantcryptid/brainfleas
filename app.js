@@ -1,156 +1,168 @@
-/* ---------- Constants & DOM Elements ---------- */
-const input = document.getElementById('shortcode-input');
-const addBtn = document.getElementById('add-system-btn');
-const systemsContainer = document.getElementById('systems-container');
-const themeToggle = document.getElementById('theme-toggle');
+// ---------- Helper ----------
+function pkColor(color) {
+    if (!color) return '#999';
+    return color.startsWith('#') ? color : `#${color}`;
+}
 
-let systems = JSON.parse(localStorage.getItem('systems')) || [];
+// ---------- State ----------
+let systems = [];
+let savedSystemRefs = JSON.parse(localStorage.getItem('systems')) || [];
 let theme = localStorage.getItem('theme') || 'light';
-document.body.setAttribute('data-theme', theme);
-themeToggle.textContent = theme === 'light' ? '🌞' : '🌙';
+document.body.dataset.theme = theme;
 
-/* ---------- Theme Toggle ---------- */
-themeToggle.addEventListener('click', () => {
+// ---------- Elements ----------
+const container = document.getElementById('systems-container');
+const addBtn = document.getElementById('add-system-btn');
+const shortcodeInput = document.getElementById('shortcode-input');
+const themeToggleBtn = document.getElementById('theme-toggle');
+
+// ---------- Theme Functions ----------
+function updateThemeIcon() {
+    themeToggleBtn.textContent = theme === 'light' ? '🌞' : '🌜';
+}
+
+themeToggleBtn.addEventListener('click', () => {
     theme = theme === 'light' ? 'dark' : 'light';
-    document.body.setAttribute('data-theme', theme);
-    themeToggle.textContent = theme === 'light' ? '🌞' : '🌙';
+    document.body.dataset.theme = theme;
     localStorage.setItem('theme', theme);
+    updateThemeIcon();
 });
+updateThemeIcon();
 
-/* ---------- Add System ---------- */
-addBtn.addEventListener('click', addSystem);
-input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') addSystem();
-});
-
-function addSystem() {
-    const ref = input.value.trim().toLowerCase();
-    if (!ref || systems.includes(ref)) return;
-    fetchSystem(ref);
-    input.value = '';
-}
-
-/* ---------- Fetch System ---------- */
-async function fetchSystem(systemRef) {
+// ---------- Fetch PluralKit System ----------
+async function fetchSystemWithFronters(systemRef) {
     try {
-        // Fetch members
-        const membersResp = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/members`);
-        const membersData = await membersResp.json();
+        console.log(`Fetching system: ${systemRef}`);
 
-        // Fetch fronters
-        const frontersResp = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/fronters`);
-        const frontersData = await frontersResp.json();
+        // --- Fetch system info ---
+        const systemRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}`);
+        if (!systemRes.ok) throw new Error("System not found or not public");
+        const system = await systemRes.json();
+        const displayRef = system.ref || system.id.slice(0, 5);
 
-        const frontersIDs = frontersData.members.map(f => f.id);
-        const mappedFronters = membersData.filter(m => frontersIDs.includes(m.id));
+        // --- Fetch members ---
+        const membersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/members`);
+        const members = membersRes.ok ? await membersRes.json() : [];
+        const memberMap = {};
+        members.forEach(m => memberMap[m.id] = m);
+        console.log("Members:", members);
 
-        createSystemCard(systemRef, membersData, mappedFronters);
+        // --- Fetch current fronters ---
+        const frontersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/fronters`);
+        const frontersData = frontersRes.ok ? await frontersRes.json() : { members: [] };
+        console.log("Fronters members:", frontersData.members);
 
-        // Save system
-        systems.push(systemRef);
-        localStorage.setItem('systems', JSON.stringify(systems));
-        saveSystemOrder();
+        let fronters = [];
+        if (Array.isArray(frontersData.members) && frontersData.members.length > 0) {
+            fronters = frontersData.members.map(f => {
+                const member = memberMap[f.id] || {};
+                return {
+                    id: f.id,
+                    name: member.name || f.name || "Unknown",
+                    display_name: member.display_name || f.display_name || null,
+                    avatar_url: member.avatar_url || f.avatar_url || "",
+                    pronouns: member.pronouns || f.pronouns || "",
+                    color: pkColor(member.color || f.color || "#999")
+                };
+            });
+        }
+
+        console.log("Mapped fronters:", fronters);
+        return { system, fronters, displayRef };
+
     } catch (err) {
-        alert(`Error fetching system "${systemRef}"`);
         console.error(err);
+        alert(`Error fetching system "${systemRef}": ${err.message}`);
+        return null;
     }
 }
 
-/* ---------- Create System Card ---------- */
-function createSystemCard(systemRef, members, fronters) {
+// ---------- Render Functions ----------
+function renderAllSystems() {
+    container.innerHTML = '';
+    systems.forEach(s => renderSystemCard(s));
+}
+
+function renderSystemCard(data) {
     const card = document.createElement('div');
-    card.classList.add('system-card');
-    card.dataset.systemRef = systemRef;
+    card.className = 'system-card';
+    card.style.borderColor = pkColor(data.system.color);
 
-    const header = document.createElement('div');
-    header.classList.add('system-header');
+    const displayRef = data.displayRef;
 
-    const avatar = document.createElement('img');
-    avatar.classList.add('system-avatar');
-    avatar.src = members[0]?.avatar_url || '';
-    avatar.style.borderColor = `#${members[0]?.color || 'ccc'}`;
+    card.innerHTML = `
+        <div class="system-header">
+            <img src="${data.system.avatar_url || ''}" 
+                 class="system-avatar" 
+                 style="border-color: ${pkColor(data.system.color)}" 
+                 onerror="this.style.display='none'">
+            <h2 class="system-name" style="color: ${pkColor(data.system.color)}">
+                ${data.system.name} (@${displayRef})
+            </h2>
+            <button class="remove-system" title="Remove system">✖️</button>
+        </div>
+        <div class="fronters">
+            ${data.fronters.length > 0
+                ? data.fronters.map(f => `
+                    <div class="fronter" style="border-color: ${f.color}">
+                        <img src="${f.avatar_url || ''}" 
+                             class="fronter-avatar" 
+                             style="border-color: ${f.color}" 
+                             onerror="this.style.display='none'">
+                        <span class="fronter-name" style="color: ${f.color}">
+                            ${f.display_name || f.name}
+                        </span>
+                        <span class="fronter-pronouns">${f.pronouns}</span>
+                    </div>
+                  `).join('')
+                : `<em style="color:#666;font-size:0.9em;">No one is fronting</em>`
+            }
+        </div>
+    `;
 
-    const name = document.createElement('h2');
-    name.classList.add('system-name');
-    name.textContent = members[0]?.display_name || systemRef;
-    name.style.color = `#${members[0]?.color || '000'}`;
+    container.appendChild(card);
 
-    const removeBtn = document.createElement('button');
-    removeBtn.classList.add('remove-system');
-    removeBtn.textContent = '✖';
-    removeBtn.addEventListener('click', () => removeSystem(systemRef, card));
+    // Remove system
+    card.querySelector('.remove-system').addEventListener('click', () => {
+        systems = systems.filter(s => s.displayRef !== displayRef);
+        savedSystemRefs = savedSystemRefs.filter(ref => ref !== displayRef);
+        localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
+        renderAllSystems();
+    });
+}
 
-    header.append(avatar, name, removeBtn);
-    card.appendChild(header);
-
-    // Fronters
-    const frontersContainer = document.createElement('div');
-    frontersContainer.classList.add('fronters');
-
-    if (fronters.length === 0) {
-        const emptyMsg = document.createElement('em');
-        emptyMsg.textContent = 'No one is fronting';
-        frontersContainer.appendChild(emptyMsg);
-    } else {
-        fronters.forEach(f => {
-            const fCard = document.createElement('div');
-            fCard.classList.add('fronter');
-
-            const fAvatar = document.createElement('img');
-            fAvatar.classList.add('fronter-avatar');
-            fAvatar.src = f.avatar_url || '';
-            fAvatar.style.borderColor = `#${f.color || 'ccc'}`;
-
-            const fName = document.createElement('div');
-            fName.classList.add('fronter-name');
-            fName.textContent = f.display_name;
-            fName.style.color = `#${f.color || '000'}`;
-
-            const fPronouns = document.createElement('div');
-            fPronouns.classList.add('fronter-pronouns');
-            fPronouns.textContent = f.pronouns || '';
-
-            fCard.append(fAvatar, fName, fPronouns);
-            frontersContainer.appendChild(fCard);
-        });
+// ---------- Add System ----------
+async function addSystem() {
+    const shortcode = shortcodeInput.value.trim();
+    if (!shortcode) return;
+    if (savedSystemRefs.includes(shortcode) || systems.some(s => s.displayRef === shortcode)) {
+        alert('System already added.');
+        return;
     }
-
-    card.appendChild(frontersContainer);
-    systemsContainer.appendChild(card);
-
-    restoreSystemOrder(); // maintain user order
+    const data = await fetchSystemWithFronters(shortcode);
+    if (data) {
+        systems.push(data);
+        savedSystemRefs.push(data.displayRef);
+        localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
+        renderAllSystems();
+        shortcodeInput.value = '';
+    }
 }
 
-/* ---------- Remove System ---------- */
-function removeSystem(systemRef, card) {
-    systems = systems.filter(s => s !== systemRef);
-    localStorage.setItem('systems', JSON.stringify(systems));
-    card.remove();
-    saveSystemOrder();
-}
+addBtn.addEventListener('click', addSystem);
 
-/* ---------- Drag-and-Drop (SortableJS) ---------- */
-Sortable.create(systemsContainer, {
-    animation: 150,
-    handle: '.system-header',
-    onEnd: saveSystemOrder
+// ---------- Press Enter to Add System ----------
+shortcodeInput.addEventListener('keyup', async (e) => {
+    if (e.key === 'Enter') {
+        addBtn.click();
+    }
 });
 
-/* ---------- Save & Restore Order ---------- */
-function saveSystemOrder() {
-    const order = Array.from(systemsContainer.children).map(card => card.dataset.systemRef);
-    localStorage.setItem('systemOrder', JSON.stringify(order));
-}
-
-function restoreSystemOrder() {
-    const order = JSON.parse(localStorage.getItem('systemOrder') || '[]');
-    if (order.length) {
-        order.forEach(ref => {
-            const card = document.querySelector(`.system-card[data-system-ref="${ref}"]`);
-            if (card) systemsContainer.appendChild(card);
-        });
+// ---------- Load Saved Systems on Start ----------
+window.addEventListener('DOMContentLoaded', async () => {
+    for (const ref of savedSystemRefs) {
+        const data = await fetchSystemWithFronters(ref);
+        if (data) systems.push(data);
     }
-}
-
-/* ---------- Load Saved Systems on Start ---------- */
-systems.forEach(ref => fetchSystem(ref));
+    renderAllSystems();
+});
