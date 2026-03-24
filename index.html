@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>BrainFleas</title>
 
     <!-- Favicon -->
@@ -13,12 +13,16 @@
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
     <link rel="manifest" href="manifest.json">
 
+    <!-- Meta for PWA -->
+    <meta name="theme-color" content="#f0f0f0" id="theme-color"> <!-- Initial theme color -->
+    <meta name="description" content="BrainFleas - Multi-system PluralKit dashboard PWA">
+
+    <!-- iOS-specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"> <!-- Keeps status bar visible on iOS -->
+
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Meta for PWA -->
-    <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="BrainFleas - Multi-system PluralKit dashboard PWA">
 </head>
 <body>
 
@@ -40,5 +44,31 @@
 
     <!-- Scripts -->
     <script src="app.js"></script>
+    <script>
+        // Set initial theme color on page load based on current theme
+        function updateThemeColor() {
+            const themeColorMeta = document.getElementById('theme-color');
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                themeColorMeta.setAttribute('content', '#121212'); // Dark mode color
+            } else {
+                themeColorMeta.setAttribute('content', '#f0f0f0'); // Light mode color
+            }
+        }
+
+        // Listen for theme change and update theme-color dynamically
+        const themeToggleButton = document.getElementById('theme-toggle');
+        themeToggleButton.addEventListener('click', () => {
+            if (document.body.getAttribute('data-theme') === 'dark') {
+                document.body.setAttribute('data-theme', 'light');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+            updateThemeColor();
+        });
+
+        // Call the function to set the initial theme color
+        updateThemeColor();
+    </script>
 </body>
 </html>
