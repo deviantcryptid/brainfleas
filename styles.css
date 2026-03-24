@@ -2,10 +2,12 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     background-color: #f0f0f0;
     color: #222;
     transition: background-color 0.3s, color 0.3s;
+    padding-top: env(safe-area-inset-top); /* Ensures content doesn't go under the status bar (for iOS) */
+    -webkit-padding-top: env(safe-area-inset-top); /* For older iOS devices */
 }
 
 /* ---------- Dark Mode ---------- */
