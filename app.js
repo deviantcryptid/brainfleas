@@ -1,3 +1,9 @@
+// ---------- Helper ----------
+function pkColor(color) {
+    if (!color) return '#999';
+    return color.startsWith('#') ? color : `#${color}`;
+}
+
 // ---------- State ----------
 let systems = [];
 let savedSystemRefs = JSON.parse(localStorage.getItem('systems')) || [];
@@ -37,12 +43,11 @@ async function fetchSystemWithFronters(systemRef) {
         // --- Fetch members ---
         const membersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/members`);
         const members = membersRes.ok ? await membersRes.json() : [];
-        console.log("Members:", members);
-
         const memberMap = {};
         members.forEach(m => memberMap[m.id] = m);
+        console.log("Members:", members);
 
-        // --- Fetch current fronters (v2 format) ---
+        // --- Fetch current fronters ---
         const frontersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/fronters`);
         const frontersData = frontersRes.ok ? await frontersRes.json() : { members: [] };
         console.log("Fronters members:", frontersData.members);
@@ -57,13 +62,12 @@ async function fetchSystemWithFronters(systemRef) {
                     display_name: member.display_name || f.display_name || null,
                     avatar_url: member.avatar_url || f.avatar_url || "",
                     pronouns: member.pronouns || f.pronouns || "",
-                    color: member.color || f.color || "#999"
+                    color: pkColor(member.color || f.color || "#999")
                 };
             });
         }
 
         console.log("Mapped fronters:", fronters);
-
         return { system, fronters, displayRef };
 
     } catch (err) {
@@ -82,7 +86,7 @@ function renderAllSystems() {
 function renderSystemCard(data) {
     const card = document.createElement('div');
     card.className = 'system-card';
-    card.style.borderColor = data.system.color || '#999';
+    card.style.borderColor = pkColor(data.system.color);
 
     const displayRef = data.displayRef;
 
@@ -90,9 +94,9 @@ function renderSystemCard(data) {
         <div class="system-header">
             <img src="${data.system.avatar_url || ''}" 
                  class="system-avatar" 
-                 style="border-color: ${data.system.color || '#999'}" 
+                 style="border-color: ${pkColor(data.system.color)}" 
                  onerror="this.style.display='none'">
-            <h2 class="system-name" style="color: ${data.system.color || '#999'}">
+            <h2 class="system-name" style="color: ${pkColor(data.system.color)}">
                 ${data.system.name} (@${displayRef})
             </h2>
             <button class="remove-system" title="Remove system">✖️</button>
@@ -131,7 +135,6 @@ function renderSystemCard(data) {
 addBtn.addEventListener('click', async () => {
     const shortcode = shortcodeInput.value.trim();
     if (!shortcode) return;
-    // Prevent duplicates
     if (savedSystemRefs.includes(shortcode) || systems.some(s => s.displayRef === shortcode)) {
         alert('System already added.');
         return;
