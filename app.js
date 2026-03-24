@@ -112,7 +112,7 @@ function renderSystemCard(data) {
                         </span>
                         <span class="fronter-pronouns">${f.pronouns}</span>
                     </div>
-                  `).join('')
+                  `).join('') 
                 : `<em style="color:#666;font-size:0.9em;">No one is fronting</em>`
             }
         </div>
@@ -120,12 +120,32 @@ function renderSystemCard(data) {
 
     container.appendChild(card);
 
+    // Adjust font size of names dynamically based on card size
+    adjustFontSize(card);
+
     // Remove system
     card.querySelector('.remove-system').addEventListener('click', () => {
         systems = systems.filter(s => s.displayRef !== data.displayRef);
         savedSystemRefs = savedSystemRefs.filter(ref => ref !== data.displayRef);
         localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
         renderAllSystems();
+    });
+}
+
+// ---------- Adjust Font Size for Fronters ----------
+function adjustFontSize(card) {
+    const fronters = card.querySelectorAll('.fronter');
+    fronters.forEach(fronter => {
+        const nameElement = fronter.querySelector('.fronter-name');
+        const nameWidth = nameElement.offsetWidth;
+        const cardWidth = fronter.offsetWidth;
+
+        // Adjust font size to fit
+        let fontSize = 1;  // Start with a default size
+        while (nameElement.scrollWidth > nameWidth && fontSize > 0.5) {
+            fontSize -= 0.05;  // Decrease size until it fits
+            nameElement.style.fontSize = `${fontSize}em`;
+        }
     });
 }
 
