@@ -4,34 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BrainFleas</title>
-    <link rel="stylesheet" href="styles.css">
 
     <!-- Favicon -->
-    <link rel="icon" href="icon-192.png" sizes="192x192">
-    <link rel="apple-touch-icon" href="icon-512.png" sizes="512x512">
-
-    <!-- PWA manifest -->
+    <link rel="icon" href="icon-192.png" type="image/png">
+    
+    <!-- PWA icons -->
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
     <link rel="manifest" href="manifest.json">
 
-    <!-- SortableJS for drag-and-drop -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Meta for PWA -->
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="BrainFleas - Multi-system PluralKit dashboard PWA">
 </head>
-<body data-theme="light">
+<body>
+
+    <!-- Header -->
     <header>
         <img src="icon-192.png" alt="BrainFleas Icon">
         <h1>BrainFleas</h1>
-        <button id="theme-toggle">🌞</button>
+        <button id="theme-toggle" title="Toggle Light/Dark Mode">🌞</button>
     </header>
 
-    <div id="input-row">
-        <input type="text" id="shortcode-input" placeholder="Enter a PluralKit system ID (ex. abcde)">
+    <!-- Input area -->
+    <div id="input-area">
+        <input id="shortcode-input" type="text" placeholder="Enter a PluralKit system ID (ex. abcde)">
         <button id="add-system-btn">Add System</button>
     </div>
 
-    <div id="systems-container">
-        <!-- System cards will be dynamically added here -->
-    </div>
+    <!-- Systems container -->
+    <div id="systems-container"></div>
 
+    <!-- Scripts -->
     <script src="app.js"></script>
 </body>
 </html>
