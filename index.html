@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> <!-- Added viewport-fit=cover for better full-screen support -->
     <title>BrainFleas</title>
 
     <!-- Favicon -->
@@ -13,12 +13,16 @@
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
     <link rel="manifest" href="manifest.json">
 
+    <!-- Meta for PWA -->
+    <meta name="theme-color" content="#f0f0f0"> <!-- Updated to match your manifest's theme color -->
+    <meta name="description" content="BrainFleas - Multi-system PluralKit dashboard PWA">
+
+    <!-- iOS specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Enables full-screen web app on iOS -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- Makes the status bar translucent so the app appears behind it -->
+
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Meta for PWA -->
-    <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="BrainFleas - Multi-system PluralKit dashboard PWA">
 </head>
 <body>
 
