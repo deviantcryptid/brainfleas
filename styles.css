@@ -101,17 +101,28 @@ body[data-theme="dark"] .system-card {
     flex-grow: 1;
 }
 
+/* ---------- Cleaner Remove Button ---------- */
 .remove-system {
     background: none;
-    font-size: 1.2em;
+    border: none;
+    font-size: 1em;
+    color: #888;
     cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    padding: 0;
+    margin-left: auto;
+}
+
+.remove-system:hover {
+    color: #f33;
+    transform: scale(1.2);
 }
 
 /* ---------- Fronters (mini cards) ---------- */
 .fronters {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px; /* slightly tighter for mini cards */
+    gap: 6px;
 }
 
 .fronter {
