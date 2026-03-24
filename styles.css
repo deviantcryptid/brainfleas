@@ -1,168 +1,164 @@
 /* ---------- Global ---------- */
 body {
-    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #222;
     transition: background-color 0.3s, color 0.3s;
 }
 
-:root {
-    --bg: #f0f0f0;
-    --text: #111;
-    --card-bg: #fff;
-    --shadow: rgba(0,0,0,0.1);
-}
-
-body[data-theme='dark'] {
-    --bg: #121212;
-    --text: #eee;
-    --card-bg: #1e1e1e;
-    --shadow: rgba(0,0,0,0.5);
+/* ---------- Dark Mode ---------- */
+body[data-theme="dark"] {
+    background-color: #121212;
+    color: #eee;
 }
 
 /* ---------- Header ---------- */
 header {
     display: flex;
     align-items: center;
-    padding: 1rem;
-    background-color: var(--card-bg);
-    box-shadow: 0 2px 4px var(--shadow);
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 header img {
     width: 40px;
     height: 40px;
-    margin-right: 0.5rem;
 }
 
 header h1 {
-    font-size: 1.8rem;
+    font-size: 1.8em;
     margin: 0;
 }
 
-/* ---------- Add System ---------- */
-#add-system-container {
-    display: flex;
-    gap: 0.5rem;
-    margin: 1rem;
-}
-
+/* ---------- Input & Buttons ---------- */
 #shortcode-input {
-    flex: 1;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
+    padding: 8px;
+    font-size: 1em;
+    width: 250px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
 }
 
-#add-system-btn {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
+#add-system-btn, #theme-toggle {
+    padding: 8px 12px;
+    font-size: 1em;
     border: none;
-    border-radius: 6px;
-    background-color: #4CAF50;
-    color: white;
+    border-radius: 5px;
+    cursor: pointer;
     transition: background-color 0.2s;
 }
 
-#add-system-btn:hover {
-    background-color: #45a049;
+#add-system-btn:hover, #theme-toggle:hover {
+    background-color: rgba(0,0,0,0.1);
 }
 
-/* ---------- Theme Toggle ---------- */
-#theme-toggle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    cursor: pointer;
-    font-size: 1.5rem;
+/* ---------- Systems Container ---------- */
+#systems-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-/* ---------- System Cards ---------- */
+/* ---------- System Card ---------- */
 .system-card {
-    background-color: var(--card-bg);
-    border: 3px solid #999;
+    border-width: 3px;
+    border-style: solid;
     border-radius: 10px;
-    padding: 1rem;
-    margin: 1rem;
-    box-shadow: 0 4px 8px var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
 }
 
-.system-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px var(--shadow);
+body[data-theme="dark"] .system-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.6);
 }
 
+/* ---------- System Header ---------- */
 .system-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .system-avatar {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    border: 3px solid #999;
-    object-fit: cover;
+    border-width: 3px;
+    border-style: solid;
 }
 
 .system-name {
-    font-size: 1.2rem;
+    font-size: 1.3em;
+    margin: 0;
     font-weight: bold;
-    flex: 1;
+    flex-grow: 1;
 }
 
 .remove-system {
-    cursor: pointer;
     background: none;
-    border: none;
-    font-size: 1.2rem;
-    color: #f33;
+    font-size: 1.2em;
+    cursor: pointer;
 }
 
 /* ---------- Fronters ---------- */
 .fronters {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 10px;
 }
 
 .fronter {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.2rem 0.5rem;
-    border: 2px solid #999;
-    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    padding: 5px;
+    width: 60px;
+    height: 80px;
+    box-sizing: border-box;
+    background-color: #fafafa;
+}
+
+body[data-theme="dark"] .fronter {
+    background-color: #2a2a2a;
 }
 
 .fronter-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid #999;
-    object-fit: cover;
+    border-width: 2px;
+    border-style: solid;
+    margin-bottom: 4px;
 }
 
 .fronter-name {
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.9em;
+    text-align: center;
+    line-height: 1.1;
 }
 
 .fronter-pronouns {
-    font-size: 0.8rem;
+    font-size: 0.75em;
     color: #666;
+    text-align: center;
 }
 
-/* ---------- Responsive ---------- */
-@media(max-width:600px) {
-    .fronter {
-        flex: 1 1 100%;
-    }
+body[data-theme="dark"] .fronter-pronouns {
+    color: #aaa;
+}
+
+/* ---------- Utility ---------- */
+em {
+    font-style: italic;
 }
