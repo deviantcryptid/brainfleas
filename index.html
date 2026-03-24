@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainFleas</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+    <link rel="shortcut icon" href="icon-192.png" type="image/png">
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="light">
+
+    <!-- Header -->
+    <header class="app-header">
+        <img src="icon-192.png" alt="BrainFleas Icon" class="app-icon">
+        <h1>BrainFleas</h1>
+    </header>
+
+    <!-- Controls -->
+    <main>
+        <div class="controls">
+            <input type="text" id="shortcode-input" placeholder="Enter systemRef">
+            <button id="add-system-btn">Add System</button>
+            <button id="theme-toggle">🌞</button>
+        </div>
+
+        <!-- Container for system cards -->
+        <div id="systems-container"></div>
+    </main>
+
+    <!-- JS -->
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+</body>
+</html>
