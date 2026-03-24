@@ -97,7 +97,7 @@ function renderSystemCard(data) {
                  style="border-color: ${pkColor(data.system.color)}" 
                  onerror="this.style.display='none'">
             <h2 class="system-name" style="color: ${pkColor(data.system.color)}">
-                ${data.system.name} (@${displayRef})
+                ${data.system.name} 
             </h2>
             <button class="remove-system" title="Remove system">✖️</button>
         </div>
