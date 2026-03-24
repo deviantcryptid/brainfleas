@@ -107,25 +107,24 @@ body[data-theme="dark"] .system-card {
     cursor: pointer;
 }
 
-/* ---------- Fronters ---------- */
+/* ---------- Fronters (mini cards) ---------- */
 .fronters {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 6px; /* slightly tighter for mini cards */
 }
 
 .fronter {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 50%;
-    padding: 5px;
-    width: 60px;
-    height: 80px;
-    box-sizing: border-box;
+    padding: 5px 8px;
+    min-width: 60px;
+    max-width: 100px;
     background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    gap: 3px;
 }
 
 body[data-theme="dark"] .fronter {
@@ -138,7 +137,7 @@ body[data-theme="dark"] .fronter {
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .fronter-name {
@@ -182,12 +181,12 @@ em {
 
     .fronters {
         justify-content: flex-start;
-        gap: 8px;
+        gap: 6px;
     }
 
     .fronter {
         width: 50px;
-        height: 70px;
+        height: auto;
         padding: 4px;
     }
 
