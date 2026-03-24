@@ -38,6 +38,7 @@ async function fetchSystemWithFronters(systemRef) {
         const systemRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}`);
         if (!systemRes.ok) throw new Error("System not found or not public");
         const system = await systemRes.json();
+
         const displayRef = system.ref || system.id.slice(0, 5);
 
         // --- Fetch members ---
@@ -52,9 +53,8 @@ async function fetchSystemWithFronters(systemRef) {
         const frontersData = frontersRes.ok ? await frontersRes.json() : { members: [] };
         console.log("Fronters members:", frontersData.members);
 
-        let fronters = [];
-        if (Array.isArray(frontersData.members) && frontersData.members.length > 0) {
-            fronters = frontersData.members.map(f => {
+        const fronters = (Array.isArray(frontersData.members) ? frontersData.members : [])
+            .map(f => {
                 const member = memberMap[f.id] || {};
                 return {
                     id: f.id,
@@ -65,7 +65,6 @@ async function fetchSystemWithFronters(systemRef) {
                     color: pkColor(member.color || f.color || "#999")
                 };
             });
-        }
 
         console.log("Mapped fronters:", fronters);
         return { system, fronters, displayRef };
@@ -104,7 +103,7 @@ function renderSystemCard(data) {
         <div class="fronters">
             ${data.fronters.length > 0
                 ? data.fronters.map(f => `
-                    <div class="fronter" style="border-color: ${f.color}">
+                    <div class="fronter">
                         <img src="${f.avatar_url || ''}" 
                              class="fronter-avatar" 
                              style="border-color: ${f.color}" 
@@ -115,7 +114,7 @@ function renderSystemCard(data) {
                         <span class="fronter-pronouns">${f.pronouns}</span>
                     </div>
                   `).join('')
-                : `<em style="color:#666;font-size:0.9em;">No one is fronting</em>`
+                : `<em style="color: #666; font-size: 0.9em;">No one is fronting</em>`
             }
         </div>
     `;
