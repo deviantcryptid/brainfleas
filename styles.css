@@ -162,3 +162,54 @@ body[data-theme="dark"] .fronter-pronouns {
 em {
     font-style: italic;
 }
+
+/* ---------- Responsive Adjustments ---------- */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    #shortcode-input {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    #add-system-btn {
+        width: 100%;
+    }
+
+    .fronters {
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .fronter {
+        width: 50px;
+        height: 70px;
+        padding: 4px;
+    }
+
+    .fronter-avatar {
+        width: 35px;
+        height: 35px;
+    }
+
+    .fronter-name {
+        font-size: 0.85em;
+    }
+
+    .fronter-pronouns {
+        font-size: 0.7em;
+    }
+
+    .system-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .system-name {
+        font-size: 1.2em;
+    }
+}
