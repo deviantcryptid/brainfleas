@@ -38,7 +38,6 @@ async function fetchSystemWithFronters(systemRef) {
         const systemRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}`);
         if (!systemRes.ok) throw new Error("System not found or not public");
         const system = await systemRes.json();
-
         const displayRef = system.ref || system.id.slice(0, 5);
 
         // --- Fetch members ---
@@ -53,8 +52,9 @@ async function fetchSystemWithFronters(systemRef) {
         const frontersData = frontersRes.ok ? await frontersRes.json() : { members: [] };
         console.log("Fronters members:", frontersData.members);
 
-        const fronters = (Array.isArray(frontersData.members) ? frontersData.members : [])
-            .map(f => {
+        let fronters = [];
+        if (Array.isArray(frontersData.members) && frontersData.members.length > 0) {
+            fronters = frontersData.members.map(f => {
                 const member = memberMap[f.id] || {};
                 return {
                     id: f.id,
@@ -65,6 +65,7 @@ async function fetchSystemWithFronters(systemRef) {
                     color: pkColor(member.color || f.color || "#999")
                 };
             });
+        }
 
         console.log("Mapped fronters:", fronters);
         return { system, fronters, displayRef };
@@ -86,8 +87,6 @@ function renderSystemCard(data) {
     const card = document.createElement('div');
     card.className = 'system-card';
     card.style.borderColor = pkColor(data.system.color);
-
-    const displayRef = data.displayRef;
 
     card.innerHTML = `
         <div class="system-header">
@@ -114,7 +113,7 @@ function renderSystemCard(data) {
                         <span class="fronter-pronouns">${f.pronouns}</span>
                     </div>
                   `).join('')
-                : `<em style="color: #666; font-size: 0.9em;">No one is fronting</em>`
+                : `<em style="color:#666;font-size:0.9em;">No one is fronting</em>`
             }
         </div>
     `;
@@ -123,8 +122,8 @@ function renderSystemCard(data) {
 
     // Remove system
     card.querySelector('.remove-system').addEventListener('click', () => {
-        systems = systems.filter(s => s.displayRef !== displayRef);
-        savedSystemRefs = savedSystemRefs.filter(ref => ref !== displayRef);
+        systems = systems.filter(s => s.displayRef !== data.displayRef);
+        savedSystemRefs = savedSystemRefs.filter(ref => ref !== data.displayRef);
         localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
         renderAllSystems();
     });
@@ -165,3 +164,19 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
     renderAllSystems();
 });
+
+// ---------- Adjust spacing for mobile input wrapping ----------
+function adjustInputAreaSpacing() {
+    const input = document.getElementById('shortcode-input');
+    if (window.innerWidth <= 600) {
+        input.style.marginRight = '0';
+        input.style.marginBottom = '5px';
+    } else {
+        input.style.marginRight = '10px';
+        input.style.marginBottom = '0';
+    }
+}
+
+// Run on load and resize
+window.addEventListener('load', adjustInputAreaSpacing);
+window.addEventListener('resize', adjustInputAreaSpacing);
