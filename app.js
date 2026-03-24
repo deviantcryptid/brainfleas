@@ -31,6 +31,9 @@ async function fetchSystemWithFronters(systemRef) {
         if (!systemRes.ok) throw new Error("System not found or not public");
         const system = await systemRes.json();
 
+        // Fallback ref
+        const displayRef = system.ref || system.id.slice(0,5);
+
         // Members
         const membersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/members`);
         const members = membersRes.ok ? await membersRes.json() : [];
@@ -42,7 +45,7 @@ async function fetchSystemWithFronters(systemRef) {
         let fronters = [];
         if (frontersRes.ok) {
             const frontersData = await frontersRes.json();
-            if (Array.isArray(frontersData.ids)) {
+            if (Array.isArray(frontersData.ids) && frontersData.ids.length > 0) {
                 fronters = frontersData.ids.map(id => {
                     const member = memberMap[id] || {};
                     return {
@@ -56,9 +59,6 @@ async function fetchSystemWithFronters(systemRef) {
                 });
             }
         }
-
-        // DisplayRef fallback for undefined ref
-        const displayRef = system.ref || system.id.slice(0, 5);
 
         return { system, fronters, displayRef };
     } catch (err) {
@@ -126,14 +126,15 @@ function renderSystemCard(data) {
 addBtn.addEventListener('click', async () => {
     const shortcode = shortcodeInput.value.trim();
     if (!shortcode) return;
-    if (savedSystemRefs.includes(shortcode)) {
+    // Check if already exists
+    if (savedSystemRefs.includes(shortcode) || systems.some(s => s.displayRef === shortcode)) {
         alert('System already added.');
         return;
     }
     const data = await fetchSystemWithFronters(shortcode);
     if (data) {
         systems.push(data);
-        savedSystemRefs.push(data.displayRef); // save the fallback ref
+        savedSystemRefs.push(data.displayRef);
         localStorage.setItem('systems', JSON.stringify(savedSystemRefs));
         renderAllSystems();
         shortcodeInput.value = '';
