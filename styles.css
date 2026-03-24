@@ -18,51 +18,36 @@ body[data-theme="dark"] {
 header {
     display: flex;
     align-items: center;
-    justify-content: center; /* center content horizontally */
-    gap: 15px;
-    padding: 15px 20px;
+    justify-content: center; /* center everything */
+    gap: 10px;
     margin-bottom: 20px;
-    background-color: #f7f7f7; /* light mode header background */
+    padding: 10px 0;
+    background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 body[data-theme="dark"] header {
-    background-color: #1e1e1e; /* dark mode header background */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    background-color: #1e1e1e;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
 }
 
-/* Header icon */
 header img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 }
 
-/* Header title */
 header h1 {
-    font-size: 2em;
+    font-size: 1.8em;
     margin: 0;
-    font-weight: bold;
-}
-
-/* Theme toggle button */
-#theme-toggle {
-    font-size: 1.5em;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-#theme-toggle:hover {
-    transform: scale(1.2);
 }
 
 /* ---------- Shortcode Input Field ---------- */
 #shortcode-input {
     padding: 8px 10px;       
     font-size: 1em;
-    width: 280px;            
+    width: 100%;          /* take full available width */
+    max-width: 300px;     /* desktop-friendly max */
     border: 2px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
@@ -88,7 +73,7 @@ header h1 {
     font-weight: 600;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    background-color: #4CAF50; 
+    background-color: #4CAF50; /* green for light mode */
     color: #fff;
 }
 
@@ -106,6 +91,20 @@ body[data-theme="dark"] #add-system-btn {
 body[data-theme="dark"] #add-system-btn:hover {
     background-color: #1B5E20;
     box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+}
+
+/* ---------- Theme Toggle Button ---------- */
+#theme-toggle {
+    padding: 8px 12px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#theme-toggle:hover {
+    background-color: rgba(0,0,0,0.1);
 }
 
 /* ---------- Systems Container ---------- */
@@ -145,7 +144,7 @@ body[data-theme="dark"] .system-card {
     border-radius: 50%;
     border-width: 3px;
     border-style: solid;
-    object-fit: cover;
+    object-fit: cover; /* fixes distortion */
 }
 
 .system-name {
@@ -203,7 +202,7 @@ body[data-theme="dark"] .fronter {
     border-width: 2px;
     border-style: solid;
     margin-bottom: 2px;
-    object-fit: cover;
+    object-fit: cover; /* fixes distortion */
 }
 
 .fronter-name {
@@ -233,17 +232,11 @@ em {
     header {
         flex-direction: column;
         align-items: center;
-        gap: 8px;
-        padding: 10px;
-    }
-
-    header h1 {
-        font-size: 1.5em;
-        text-align: center;
+        gap: 5px;
     }
 
     #shortcode-input {
-        width: 100%;
+        width: 100%;          
         margin-right: 0;
         margin-bottom: 5px;
     }
