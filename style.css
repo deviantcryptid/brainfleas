@@ -1,0 +1,169 @@
+/* ---------- Theme Variables ---------- */
+body[data-theme='light'] {
+    --bg-color: #f9f9f9;
+    --text-color: #222;
+    --card-bg: #fff;
+    --card-shadow: rgba(0,0,0,0.1);
+    --control-bg: #eee;
+    --control-text: #222;
+    --input-bg: #fff;
+    --input-text: #222;
+}
+
+body[data-theme='dark'] {
+    --bg-color: #222;
+    --text-color: #f9f9f9;
+    --card-bg: #333;
+    --card-shadow: rgba(0,0,0,0.5);
+    --control-bg: #444;
+    --control-text: #f9f9f9;
+    --input-bg: #555;
+    --input-text: #f9f9f9;
+}
+
+/* ---------- Global Styles ---------- */
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: sans-serif;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 1em;
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 5px var(--card-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.app-icon {
+    width: 48px;
+    height: 48px;
+}
+
+/* ---------- Controls ---------- */
+.controls {
+    display: flex;
+    gap: 0.5em;
+    padding: 1em;
+    background-color: var(--control-bg);
+    color: var(--control-text);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.controls input {
+    flex: 1;
+    padding: 0.5em;
+    border-radius: 5px;
+    border: 1px solid #888;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+}
+
+.controls button {
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s;
+}
+
+.controls button:hover {
+    filter: brightness(0.9);
+}
+
+/* ---------- System Card ---------- */
+.system-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 3px solid; /* JS sets color */
+    box-shadow: 0 4px 10px var(--card-shadow);
+    margin: 1em;
+    overflow: hidden;
+    transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.system-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px var(--card-shadow);
+}
+
+.system-header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 1em;
+}
+
+.system-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid; /* JS sets color */
+}
+
+.system-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+    /* JS sets color */
+}
+
+.system-header button.remove-system {
+    margin-left: auto;
+    background: transparent;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+/* ---------- Fronters ---------- */
+.fronters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 0.5em 1em 1em 1em;
+}
+
+.fronter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    border: 2px solid; /* JS sets color */
+    border-radius: 8px;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.fronter-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid; /* JS sets color */
+    margin-bottom: 0.2em;
+}
+
+.fronter-name {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin: 0;
+    /* JS sets color */
+}
+
+.fronter-pronouns {
+    font-size: 0.8em;
+    color: rgba(0,0,0,0.5); /* slightly faded, unchanged by JS */
+}
+
+body[data-theme='dark'] .fronter-pronouns {
+    color: rgba(255,255,255,0.5);
+}
