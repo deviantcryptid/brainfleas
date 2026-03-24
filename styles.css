@@ -1,169 +1,168 @@
-/* ---------- Theme Variables ---------- */
-body[data-theme='light'] {
-    --bg-color: #f9f9f9;
-    --text-color: #222;
+/* ---------- Global ---------- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+:root {
+    --bg: #f0f0f0;
+    --text: #111;
     --card-bg: #fff;
-    --card-shadow: rgba(0,0,0,0.1);
-    --control-bg: #eee;
-    --control-text: #222;
-    --input-bg: #fff;
-    --input-text: #222;
+    --shadow: rgba(0,0,0,0.1);
 }
 
 body[data-theme='dark'] {
-    --bg-color: #222;
-    --text-color: #f9f9f9;
-    --card-bg: #333;
-    --card-shadow: rgba(0,0,0,0.5);
-    --control-bg: #444;
-    --control-text: #f9f9f9;
-    --input-bg: #555;
-    --input-text: #f9f9f9;
-}
-
-/* ---------- Global Styles ---------- */
-body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-family: sans-serif;
+    --bg: #121212;
+    --text: #eee;
+    --card-bg: #1e1e1e;
+    --shadow: rgba(0,0,0,0.5);
 }
 
 /* ---------- Header ---------- */
-.app-header {
+header {
     display: flex;
     align-items: center;
-    gap: 0.5em;
-    padding: 1em;
+    padding: 1rem;
     background-color: var(--card-bg);
-    box-shadow: 0 2px 5px var(--card-shadow);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    box-shadow: 0 2px 4px var(--shadow);
 }
 
-.app-icon {
-    width: 48px;
-    height: 48px;
+header img {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.5rem;
 }
 
-/* ---------- Controls ---------- */
-.controls {
+header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* ---------- Add System ---------- */
+#add-system-container {
     display: flex;
-    gap: 0.5em;
-    padding: 1em;
-    background-color: var(--control-bg);
-    color: var(--control-text);
-    flex-wrap: wrap;
-    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem;
 }
 
-.controls input {
+#shortcode-input {
     flex: 1;
-    padding: 0.5em;
-    border-radius: 5px;
-    border: 1px solid #888;
-    background-color: var(--input-bg);
-    color: var(--input-text);
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
 }
 
-.controls button {
-    padding: 0.5em 1em;
-    border-radius: 5px;
-    border: none;
+#add-system-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     cursor: pointer;
-    font-size: 1em;
-    transition: background 0.2s;
+    border: none;
+    border-radius: 6px;
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.2s;
 }
 
-.controls button:hover {
-    filter: brightness(0.9);
+#add-system-btn:hover {
+    background-color: #45a049;
 }
 
-/* ---------- System Card ---------- */
+/* ---------- Theme Toggle ---------- */
+#theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+/* ---------- System Cards ---------- */
 .system-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    border: 3px solid; /* JS sets color */
-    box-shadow: 0 4px 10px var(--card-shadow);
-    margin: 1em;
-    overflow: hidden;
-    transition: transform 0.1s, box-shadow 0.2s;
+    background-color: var(--card-bg);
+    border: 3px solid #999;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1rem;
+    box-shadow: 0 4px 8px var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .system-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px var(--card-shadow);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px var(--shadow);
 }
 
 .system-header {
     display: flex;
     align-items: center;
-    gap: 1em;
-    padding: 1em;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .system-avatar {
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    border: 3px solid; /* JS sets color */
+    border: 3px solid #999;
+    object-fit: cover;
 }
 
 .system-name {
-    font-size: 1.5em;
+    font-size: 1.2rem;
     font-weight: bold;
-    margin: 0;
-    /* JS sets color */
+    flex: 1;
 }
 
-.system-header button.remove-system {
-    margin-left: auto;
-    background: transparent;
-    font-size: 1.2em;
+.remove-system {
     cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #f33;
 }
 
 /* ---------- Fronters ---------- */
 .fronters {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
-    padding: 0.5em 1em 1em 1em;
+    gap: 0.5rem;
 }
 
 .fronter {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    width: 80px;
-    border: 2px solid; /* JS sets color */
+    gap: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    border: 2px solid #999;
     border-radius: 8px;
-    padding: 0.5em;
-    text-align: center;
 }
 
 .fronter-avatar {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 2px solid; /* JS sets color */
-    margin-bottom: 0.2em;
+    border: 2px solid #999;
+    object-fit: cover;
 }
 
 .fronter-name {
     font-weight: bold;
-    font-size: 0.9em;
-    margin: 0;
-    /* JS sets color */
+    font-size: 0.95rem;
 }
 
 .fronter-pronouns {
-    font-size: 0.8em;
-    color: rgba(0,0,0,0.5); /* slightly faded, unchanged by JS */
+    font-size: 0.8rem;
+    color: #666;
 }
 
-body[data-theme='dark'] .fronter-pronouns {
-    color: rgba(255,255,255,0.5);
+/* ---------- Responsive ---------- */
+@media(max-width:600px) {
+    .fronter {
+        flex: 1 1 100%;
+    }
 }
