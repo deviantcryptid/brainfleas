@@ -185,24 +185,28 @@ body[data-theme="dark"] .system-card {
     transform: scale(1.2);
 }
 
-/* ---------- Fronters (mini cards) ---------- */
+/* ---------- Fronters Container (Horizontal Scroll) ---------- */
 .fronters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    display: flex;                 /* Align the items horizontally */
+    gap: 6px;                      /* Space between each fronting member */
+    overflow-x: auto;              /* Enable horizontal scrolling */
+    max-width: 100%;               /* Ensure full width */
+    padding-bottom: 10px;          /* Space for a scrollbar (if needed) */
 }
 
+/* ---------- Fronter (Individual Member) ---------- */
 .fronter {
-    display: flex;
+    display: inline-flex;          /* Make each fronting member stay on one line */
     flex-direction: column;
     align-items: center;
     padding: 5px 8px;
-    min-width: 100px;  /* Increased min width for consistent card size */
-    max-width: 100px;  /* Fixed max width */
+    min-width: 80px;               /* Set a minimum width for each member */
+    max-width: 100px;              /* Set a maximum width for each member */
     background-color: #fafafa;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     gap: 3px;
+    flex-shrink: 0;                /* Prevent the items from shrinking */
 }
 
 body[data-theme="dark"] .fronter {
@@ -224,21 +228,9 @@ body[data-theme="dark"] .fronter {
     font-size: 1em; /* Default font size */
     text-align: center;
     line-height: 1.1;
-    white-space: nowrap; /* Prevent wrapping */
+    white-space: nowrap;  /* Prevent text from wrapping */
     overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%; /* Ensure name fits within card */
-    transition: font-size 0.2s ease; /* Smooth transition for resizing */
-}
-
-/* Dynamic resizing for text to fit */
-.fronter-name {
-    display: inline-block;
-    font-size: 1em;
-    line-height: 1.1;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
+    text-overflow: ellipsis;  /* Add ellipsis if text overflows */
 }
 
 /* ---------- Fronter Pronouns ---------- */
