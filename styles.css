@@ -18,7 +18,7 @@ body[data-theme="dark"] {
 header {
     display: flex;
     align-items: center;
-    justify-content: center;  /* centers the header container */
+    justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
     padding: 10px;
@@ -95,11 +95,21 @@ body[data-theme="dark"] #add-system-btn:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
+    color: inherit;
 }
 
 #theme-toggle:hover {
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* ---------- Dark Mode Specific for Toggle ---------- */
+body[data-theme="dark"] #theme-toggle {
+    color: #ccc; /* softer, less bright in dark mode */
+}
+
+body[data-theme="dark"] #theme-toggle:hover {
+    background-color: rgba(255,255,255,0.1);
 }
 
 /* ---------- Systems Container ---------- */
@@ -197,7 +207,7 @@ body[data-theme="dark"] .fronter {
     border-width: 2px;
     border-style: solid;
     margin-bottom: 2px;
-    object-fit: cover; /* fixes distortion */
+    object-fit: cover;
 }
 
 .fronter-name {
