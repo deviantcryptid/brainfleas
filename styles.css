@@ -99,17 +99,18 @@ body[data-theme="dark"] #add-system-btn:hover {
     color: inherit;
 }
 
-#theme-toggle:hover {
+/* Light mode hover */
+body[data-theme="light"] #theme-toggle:hover {
     background-color: rgba(0,0,0,0.05);
 }
 
-/* ---------- Dark Mode Specific for Toggle ---------- */
+/* Dark mode color and hover */
 body[data-theme="dark"] #theme-toggle {
-    color: #ccc; /* softer, less bright in dark mode */
+    color: #555; /* darker gray in dark mode */
 }
 
 body[data-theme="dark"] #theme-toggle:hover {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255,255,255,0.08); /* subtle white hover */
 }
 
 /* ---------- Systems Container ---------- */
@@ -149,7 +150,7 @@ body[data-theme="dark"] .system-card {
     border-radius: 50%;
     border-width: 3px;
     border-style: solid;
-    object-fit: cover; /* fixes distortion */
+    object-fit: cover;
 }
 
 .system-name {
