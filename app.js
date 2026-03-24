@@ -26,25 +26,26 @@ updateThemeIcon();
 // ---------- Fetch PluralKit System ----------
 async function fetchSystemWithFronters(systemRef) {
     try {
-        // System info
+        // Fetch system info
         const systemRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}`);
         if (!systemRes.ok) throw new Error("System not found or not public");
         const system = await systemRes.json();
 
         // Fallback ref
-        const displayRef = system.ref || system.id.slice(0,5);
+        const displayRef = system.ref || system.id.slice(0, 5);
 
-        // Members
+        // Fetch members first
         const membersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/members`);
         const members = membersRes.ok ? await membersRes.json() : [];
         const memberMap = {};
         members.forEach(m => memberMap[m.id] = m);
 
-        // Current fronters
+        // Fetch current fronters
         const frontersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/fronters`);
         let fronters = [];
         if (frontersRes.ok) {
             const frontersData = await frontersRes.json();
+            // Map IDs from fronters endpoint to full member info
             if (Array.isArray(frontersData.ids) && frontersData.ids.length > 0) {
                 fronters = frontersData.ids.map(id => {
                     const member = memberMap[id] || {};
@@ -52,7 +53,7 @@ async function fetchSystemWithFronters(systemRef) {
                         id: id,
                         name: member.name || "Unknown",
                         display_name: member.display_name || null,
-                        avatar_url: member.avatar_url || '',
+                        avatar_url: member.avatar_url || "",
                         pronouns: member.pronouns || "",
                         color: member.color || "#999"
                     };
@@ -126,7 +127,7 @@ function renderSystemCard(data) {
 addBtn.addEventListener('click', async () => {
     const shortcode = shortcodeInput.value.trim();
     if (!shortcode) return;
-    // Check if already exists
+    // Prevent duplicates
     if (savedSystemRefs.includes(shortcode) || systems.some(s => s.displayRef === shortcode)) {
         alert('System already added.');
         return;
