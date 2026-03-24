@@ -16,6 +16,12 @@ body[data-theme="dark"] {
     color: #eee;
 }
 
+/* ---------- Light Mode ---------- */
+body[data-theme="light"] {
+    background-color: #f0f0f0;
+    color: #222;
+}
+
 /* ---------- Header ---------- */
 header {
     display: flex;
