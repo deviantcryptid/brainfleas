@@ -32,14 +32,24 @@ header h1 {
     margin: 0;
 }
 
-/* ---------- Input & Buttons ---------- */
+/* ---------- Shortcode Input Field ---------- */
 #shortcode-input {
-    padding: 8px;
+    padding: 8px 10px;       /* extra horizontal padding */
     font-size: 1em;
-    width: 250px;
+    width: 280px;            /* wide enough for placeholder */
     border: 2px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
+    box-sizing: border-box;  /* includes padding in width */
+}
+
+/* Responsive input */
+@media (max-width: 600px) {
+    #shortcode-input {
+        width: 100%;          /* full width on mobile */
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
 }
 
 /* ---------- Stylish Add System Button ---------- */
@@ -215,7 +225,8 @@ em {
     }
 
     #shortcode-input {
-        width: 100%;
+        width: 100%;          /* full width on mobile */
+        margin-right: 0;
         margin-bottom: 5px;
     }
 
