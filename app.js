@@ -39,26 +39,25 @@ async function fetchSystemWithFronters(systemRef) {
         const members = membersRes.ok ? await membersRes.json() : [];
         console.log("Members:", members);
 
-        // Build memberMap keyed by ID (not UUID!)
         const memberMap = {};
         members.forEach(m => memberMap[m.id] = m);
 
-        // --- Fetch fronters ---
+        // --- Fetch current fronters (v2 format) ---
         const frontersRes = await fetch(`https://api.pluralkit.me/v2/systems/${systemRef}/fronters`);
-        const frontersData = frontersRes.ok ? await frontersRes.json() : { ids: [] };
-        console.log("Fronters IDs:", frontersData.ids);
+        const frontersData = frontersRes.ok ? await frontersRes.json() : { members: [] };
+        console.log("Fronters members:", frontersData.members);
 
         let fronters = [];
-        if (Array.isArray(frontersData.ids) && frontersData.ids.length > 0) {
-            fronters = frontersData.ids.map(id => {
-                const member = memberMap[id] || {};
+        if (Array.isArray(frontersData.members) && frontersData.members.length > 0) {
+            fronters = frontersData.members.map(f => {
+                const member = memberMap[f.id] || {};
                 return {
-                    id: id,
-                    name: member.name || "Unknown",
-                    display_name: member.display_name || null,
-                    avatar_url: member.avatar_url || "",
-                    pronouns: member.pronouns || "",
-                    color: member.color || "#999"
+                    id: f.id,
+                    name: member.name || f.name || "Unknown",
+                    display_name: member.display_name || f.display_name || null,
+                    avatar_url: member.avatar_url || f.avatar_url || "",
+                    pronouns: member.pronouns || f.pronouns || "",
+                    color: member.color || f.color || "#999"
                 };
             });
         }
