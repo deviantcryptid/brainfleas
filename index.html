@@ -4,43 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BrainFleas</title>
+    <link rel="stylesheet" href="styles.css">
 
     <!-- Favicon -->
-    <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
-    <link rel="shortcut icon" href="icon-192.png" type="image/png">
+    <link rel="icon" href="icon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="icon-512.png" sizes="512x512">
 
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- SortableJS for drag-and-drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body data-theme="light">
-
-    <!-- Header -->
-    <header class="app-header">
-        <img src="icon-192.png" alt="BrainFleas Icon" class="app-icon">
+    <header>
+        <img src="icon-192.png" alt="BrainFleas Icon">
         <h1>BrainFleas</h1>
+        <button id="theme-toggle">🌞</button>
     </header>
 
-    <!-- Controls -->
-    <main>
-        <div class="controls">
-            <input type="text" id="shortcode-input" placeholder="Enter a PluralKit system ID (ex. abcde)">
-            <button id="add-system-btn">Add System</button>
-            <button id="theme-toggle">🌞</button>
-        </div>
+    <div id="input-row">
+        <input type="text" id="shortcode-input" placeholder="Enter a PluralKit system ID (ex. abcde)">
+        <button id="add-system-btn">Add System</button>
+    </div>
 
-        <!-- Container for system cards -->
-        <div id="systems-container"></div>
-    </main>
+    <div id="systems-container">
+        <!-- System cards will be dynamically added here -->
+    </div>
 
-    <!-- JS -->
     <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
-        }
-    </script>
 </body>
 </html>
