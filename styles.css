@@ -6,7 +6,7 @@ body {
     background-color: #f0f0f0;
     color: #222;
     transition: background-color 0.3s, color 0.3s;
-    padding-top: env(safe-area-inset-top); /* Ensures content doesn't go under the status bar (for iOS) */
+    padding-top: env(safe-area-inset-top); /* Ensures content starts below the status bar */
     -webkit-padding-top: env(safe-area-inset-top); /* For older iOS devices */
 }
 
