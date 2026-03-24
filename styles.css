@@ -197,8 +197,8 @@ body[data-theme="dark"] .system-card {
     flex-direction: column;
     align-items: center;
     padding: 5px 8px;
-    min-width: 60px;
-    max-width: 100px;
+    min-width: 100px;  /* Increased min width for consistent card size */
+    max-width: 100px;  /* Fixed max width */
     background-color: #fafafa;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
@@ -210,22 +210,38 @@ body[data-theme="dark"] .fronter {
 }
 
 .fronter-avatar {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
     object-fit: cover;
 }
 
 .fronter-name {
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 1em; /* Default font size */
     text-align: center;
     line-height: 1.1;
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%; /* Ensure name fits within card */
+    transition: font-size 0.2s ease; /* Smooth transition for resizing */
 }
 
+/* Dynamic resizing for text to fit */
+.fronter-name {
+    display: inline-block;
+    font-size: 1em;
+    line-height: 1.1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* ---------- Fronter Pronouns ---------- */
 .fronter-pronouns {
     font-size: 0.75em;
     color: #666;
